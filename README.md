@@ -17,6 +17,7 @@ You can use it without installing anything. You can also use the open source ver
 - [Getting Started](#getting-started)
   - [Pre-requisites](#pre-requisites)
   - [Development](#development)
+- [Community](#community)
 - [License](#license)
 
 ## Getting started
@@ -38,3 +39,7 @@ These instructions will help you to get a copy of the project up and running on 
 ## Community
 
 - [Twitter](https://twitter.com/AdafaceHQ): Adaface Open Source
+
+## License
+
+- GNU General Public License v3.0: [Full license here](https://github.com/adaface-x/og-image/blob/main/LICENSE)

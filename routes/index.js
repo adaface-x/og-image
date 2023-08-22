@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs");
 var path = require("path");
+var crypto = require("crypto");
 
 const { isValidHexaCode } = require("../utils/util");
 const { generateScreenshotUsingPuppeteer } = require("../services/puppeteer");
