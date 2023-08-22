@@ -1,0 +1,279 @@
+<html>
+
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta
+      name='viewport'
+      content='width=device-width,height=device-height,initial-scale=1,viewport-fit=cover,user-scalable=no'
+    />
+    <title>Open Graph Image Generator</title>
+    <meta
+      name='description'
+      description='Generate open graph images and meta images automatically.'
+    />
+
+    <meta property='og:site_name' content='Open Graph Image Generator' />
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content='{{og_image_server_url}}' />
+    <meta property='og:title' content='Open Graph Image Generator' />
+    <meta
+      property='og:description'
+      content='Generate open graph images and meta images automatically.'
+    />
+    <meta property='og:locale' content='en_US' />
+    <meta property='og:image' content='' />
+    <meta name='twitter:url' content='{{og_image_server_url}}' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta
+      name='twitter:description'
+      content='Generate open graph images and meta images automatically.'
+    />
+    <meta name='twitter:title' content='Open Graph Image Generator' />
+    <meta name='twitter:image' content='' />
+
+    <link
+      href='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.17/tailwind.min.css'
+      rel='stylesheet'
+    />
+    <link
+      rel='stylesheet'
+      href='https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css'
+    />
+
+    <link rel='canonical' href='{{og_image_server_url}}' />
+    {{! prettier-ignore}}
+    <script type="application/ld+json">
+      {
+         "@context": "https://schema.org",
+         "@type": "Organization",
+         "url": "https://open-source.adaface.com",
+         "logo": "https://res.cloudinary.com/adaface/image/upload/w_400/adaface_logo_square.png"
+      }
+    </script>
+  </head>
+
+  <body class='bg-white'>
+    <nav class='mx-auto hidden md:flex px-4 py-2'>
+      <div class='flex flex-1'>
+        <a
+          href='https://github.com/adaface-x'
+          class='text-sm font-semibold leading-6 text-gray-900'
+        >Adaface Open Source
+        </a>
+      </div>
+      <div class='space-x-8'>
+        <a
+          href='#'
+          class='text-sm font-semibold leading-6 text-gray-900'
+        >Github</a>
+        <a
+          href='https://twitter.com/AdafaceHQ'
+          class='text-sm font-semibold leading-6 text-gray-900'
+        >Twitter</a>
+      </div>
+    </nav>
+
+    <div
+      class='w-full h-full bg-white flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8 p-8 items-center justify-center'
+    >
+
+      <div class=''>
+        <h1 class='text-2xl font-semibold mb-1'>Open Graph Image Generator</h1>
+        <p class='mb-8'>Generate open graph images and meta images
+          automatically.</p>
+
+        <div class='p-8 rounded-lg bg-white shadow-md'>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='title'
+            >Title:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='title'
+              id='title'
+              placeholder='Enter title'
+              value='{{title}}'
+            />
+          </div>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='name'
+            >Subtitle:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='name'
+              id='name'
+              placeholder='Enter sub title of the image'
+              value='{{name}}'
+            />
+          </div>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='bg-color'
+            >Background color:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='bg-color'
+              id='backgroundColor'
+              placeholder='Enter background color'
+              value='{{backgroundColor}}'
+            />
+          </div>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='font-color'
+            >Font color:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='font-color'
+              id='fontColor'
+              placeholder='Enter font color'
+              value='{{fontColor}}'
+            />
+          </div>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='profile-pic'
+            >Profile Picture URL:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='profile-pic'
+              id='profilePicture'
+              placeholder='Enter profile picture URL'
+              value='{{profilePicture}}'
+            />
+          </div>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='author-name'
+            >Author Name:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='author-name'
+              id='authorName'
+              placeholder='Enter author name'
+              value='{{authorName}}'
+            />
+          </div>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='emoji'
+            >Emoji:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='emoji'
+              id='emoji'
+              placeholder='Enter emoji'
+              value='{{emoji}}'
+            />
+          </div>
+          <div class='mb-4'>
+            <label
+              class='block text-xs font-semibold mb-2 text-gray-600'
+              for='tags'
+            >Tags:</label>
+            <input
+              class='w-full px-2 py-1 text-sm border rounded'
+              type='text'
+              name='tags'
+              id='tags'
+              placeholder='Enter tags'
+              value='{{tags}}'
+            />
+          </div>
+          <button
+            onclick='update()'
+            class='mt-4 bg-blue-500 text-white px-2 py-1 text-sm rounded'
+          >Generate Image Link</button>
+        </div>
+      </div>
+
+      <div id='og-image-result'>
+        <img
+          class='w-full h-auto mb-4 shadow-lg max-w-xl'
+          id='og-image'
+          src='https://placehold.co/1200x630'
+          alt='Generated Image'
+        />
+        <input
+          class='w-full px-2 py-1 text-sm text-gray-600 border rounded'
+          type='text'
+          name='image-link'
+          id='image-link'
+          placeholder='Image link'
+          value='https://placehold.co/1200x630'
+          readonly
+        />
+        <button
+          onclick='copyUrl()'
+          class='w-full bg-blue-500 text-white px-2 py-1 text-sm mt-2 rounded'
+        >Copy Image Link</button>
+      </div>
+    </div>
+
+    <script src='https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js'></script>
+
+    {{! prettier-ignore}}
+    <script>
+      var og_image_server_url = "{{{og_image_server_url}}}";
+      var template = "{{{template}}}" || "og-image";
+      var imageId = "";
+      // Create an instance of Notyf
+      var notyf = new Notyf({
+        position: {
+          x: "center",
+          y: "top"
+        }
+      });
+      function update() {
+          const name = document.getElementById("name").value;
+          const backgroundColor = document.getElementById("backgroundColor").value;
+          const fontColor = document.getElementById("fontColor").value;
+          const profilePicture = document.getElementById("profilePicture").value;
+          const authorName = document.getElementById("authorName").value;
+          const title = document.getElementById("title").value;
+          const emoji = document.getElementById("emoji").value;
+          const tags = document.getElementById("tags").value;
+
+          if (!name || !authorName || !title ){
+              notyf.error("Missing required fields");
+              return;
+          }
+
+          if(!profilePicture || !profilePicture.startsWith("https://")){
+              notyf.error("Profile picture must be a valid URL");
+              return;
+          }
+
+          const imageLink = `${og_image_server_url}/${encodeURIComponent(title)}.png?name=${name}&tags=${tags}&authorName=${authorName}&emoji=${emoji}&profilePicture=${profilePicture}${backgroundColor?`&backgroundColor=${encodeURIComponent(backgroundColor)}`:""}${fontColor?`&fontColor=${encodeURIComponent(fontColor)}`:""}`;
+          document.getElementById("og-image").src = imageLink;
+          document.getElementById("image-link").value = imageLink;
+
+          notyf.success("Image generated successfully");
+      }
+
+      function copyUrl() {
+          const imageLink = document.getElementById("og-image").src;
+          navigator.clipboard.writeText(imageLink);
+          notyf.success("Image link copied to clipboard");
+      }
+
+      // run update on load
+      update();
+    </script>
+  </body>
+</html>

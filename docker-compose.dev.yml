@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  og_image_redis:
+    image: 'redis:6.2.6-alpine'
+    container_name: og_image_redis
+    ports:
+      - '6390:6379'
+  og_image:
+    platform: linux/amd64
+    container_name: og_image
+    build: ../og-image
+    volumes:
+      - ../og-image/views:/og-image/views
+    depends_on:
+      - og_image_redis
+    working_dir: /og-image
+    ports:
+      - '4000:4000'
+    expose:
+      - '4000'
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - OG_IMAGE_REDIS_URL=rediss://og_image_redis:6379/
+      - OG_IMAGE_SERVER_URL=http://localhost:4000
+      - DEBUG=1
+      - PORT=4000
+    links:
+      - og_image_redis:og_image_redis

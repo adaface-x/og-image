@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "og-image",
+      "script": "npm",
+      "args": ["run", "start"]
+    }
+  ]
+}

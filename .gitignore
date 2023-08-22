@@ -1,0 +1,11 @@
+build
+node_modules
+package-lock.json
+.DS_Store
+npm-debug.log
+newrelic_agent.log
+.cache/puppeteer
+puppeteer.config.cjs
+public/generated
+docker-compose.prod.yml
+nginx
