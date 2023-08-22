@@ -110,7 +110,7 @@ router.get("/og-image/:image/", async function (req, res, next) {
 			image,
 			(err) => {
 				if (err) {
-					console.log(err);
+					console.log("Error writing data", err);
 					sendDiscordAlert({
 						message: "Error generating og image",
 						data: {
@@ -135,8 +135,6 @@ router.get("/og-image/:image/", async function (req, res, next) {
 						)
 					);
 					return;
-				} else {
-					console.log("Error writing data", err);
 				}
 			}
 		);

@@ -10,7 +10,7 @@ You can use it without installing anything. You can also use the open source ver
 
 ### Sample meta images generated using the generator:
 
-- placeholder
+- https://open-source.adaface.com/og-image/OG%20Image%20Generator.png?name=Adaface&tags=Open%20souce&authorName=Sanjana&emoji=%E2%9C%A8&profilePicture=https://res.cloudinary.com/adaface/image/upload/v1692702368/sanjana_kumari.jpg&backgroundColor=%23011f8a&fontColor=%23ffffff
 
 ## Table of contents
 

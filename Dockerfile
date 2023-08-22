@@ -53,6 +53,9 @@ RUN npm install cross-env -g
 
 COPY . /og-image
 
+# create og-image/public/generated folder
+RUN mkdir -p /og-image/public/generated
+
 # allow ports to be publicly available
 EXPOSE 4000
 
