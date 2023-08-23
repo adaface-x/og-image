@@ -169,7 +169,7 @@ router.get(["/og-image"], function (req, res, next) {
 	var defaultParams = {
 		title: "OG Image Generator",
 		name: "Team Adaface",
-		tags: ["Open souce"],
+		tags: ["Open source"],
 		authorName: "Sanjana",
 		profilePicture:
 			"https://res.cloudinary.com/adaface/image/upload/v1692702368/sanjana_kumari.jpg",
