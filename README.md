@@ -1,5 +1,4 @@
-<!-- ![github-cover](https://user-images.githubusercontent.com/70569022/233320406-da81d842-c0d9-4d63-938e-fe521203e4e0.png) -->
-
+![github-cover](https://github.com/adaface-x/og-image/assets/2704679/7688bfd3-eae7-4fef-84b6-101483ad695b)
 ---
 
 # Open Graph Image Generator
