@@ -8,7 +8,7 @@ clearImagesQueue.add(
 	{},
 	{
 		repeat: {
-			cron: "0 */4 * * *",
+			cron: "0 */2 * * *",
 		},
 		attempts: 2,
 		jobId: `clear-image-queue`,
@@ -33,7 +33,7 @@ clearImagesQueue.process("clear-image-queue", async (job, done) => {
 			if (err) throw err;
 			const pngFiles = files.filter((el) => path.extname(el) === ".png");
 
-			if ((pngFiles || []).length > 20) {
+			if ((pngFiles || []).length > 10) {
 				for (const file of pngFiles) {
 					fs.unlink(path.join(directory, file), (err) => {
 						if (err) throw err;
