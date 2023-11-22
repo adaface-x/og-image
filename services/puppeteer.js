@@ -16,7 +16,12 @@ const generateScreenshotUsingPuppeteer = async ({
 	try {
 		console.log("generateScreenshotUsingPuppeteer", template, data);
 		const browser = await puppeteer.launch({
-			args: ["--no-sandbox", "--disable-setuid-sandbox"],
+			args: [
+				"--no-sandbox",
+				"--disable-setuid-sandbox",
+				"--disable-dev-profile",
+				"--disable-dev-shm-usage",
+			],
 			headless: "new",
 		});
 		const html = templates[template].html(data);
