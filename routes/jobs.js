@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { exec } = require("child_process");
 const { clearImagesQueue } = require("../services/queue");
 const { sendDiscordAlert } = require("../services/discord");
 
@@ -28,6 +29,7 @@ clearImagesQueue.on("failed", (job, err) => {
 
 clearImagesQueue.process("clear-image-queue", async (job, done) => {
 	try {
+		console.log("clearImagesQueue job started");
 		const directory = path.join(__dirname, "../public/generated");
 		fs.readdir(directory, (err, files) => {
 			if (err) throw err;
@@ -40,6 +42,22 @@ clearImagesQueue.process("clear-image-queue", async (job, done) => {
 					});
 				}
 			}
+		});
+
+		//find dev profile files with name starting with "puppeteer_dev*" and delete them
+		command = `find / -type d -name "puppeteer_dev*" | xargs rm -rf`;
+		exec(command, (error, stdout, stderr) => {
+			if (error) {
+				console.error(`Error executing command: ${error.message}`);
+				return;
+			}
+
+			if (stderr) {
+				console.error(`Command stderr: ${stderr}`);
+				return;
+			}
+
+			console.log(`Command stdout: ${stdout}`);
 		});
 		done(null, {
 			success: true,
