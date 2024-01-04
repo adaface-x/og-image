@@ -25,5 +25,7 @@ services:
       - OG_IMAGE_SERVER_URL=http://localhost:4000
       - DEBUG=1
       - PORT=4000
+      - NEW_RELIC_NO_CONFIG_FILE=1
+      - NEW_RELIC_ENABLED=0
     links:
       - og_image_redis:og_image_redis
