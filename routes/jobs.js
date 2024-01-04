@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { exec } = require("child_process");
 const { clearImagesQueue } = require("../services/queue");
 const { sendDiscordAlert } = require("../services/discord");
 
@@ -28,6 +29,7 @@ clearImagesQueue.on("failed", (job, err) => {
 
 clearImagesQueue.process("clear-image-queue", async (job, done) => {
 	try {
+		console.log("clearImagesQueue job started");
 		const directory = path.join(__dirname, "../public/generated");
 		fs.readdir(directory, (err, files) => {
 			if (err) throw err;
@@ -41,6 +43,7 @@ clearImagesQueue.process("clear-image-queue", async (job, done) => {
 				}
 			}
 		});
+
 		done(null, {
 			success: true,
 		});
