@@ -1,19 +1,23 @@
 {
   "singleQuote": true,
+
   "overrides": [
     {
       "files": "*.js",
       "options": {
         "singleQuote": false,
         "printWidth": 80,
-        "useTabs": true,
+        "useTabs": false,
         "tabWidth": 4
       }
     },
     {
-      "files": "*.less",
+      "files": "*.yml",
       "options": {
-        "singleQuote": false
+        "singleQuote": false,
+        "printWidth": 80,
+        "useTabs": false,
+        "tabWidth": 4
       }
     }
   ]

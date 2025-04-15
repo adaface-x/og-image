@@ -2,7 +2,6 @@ require("newrelic");
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
-var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 const { createBullBoard } = require("@bull-board/api");
@@ -13,7 +12,6 @@ var indexRouter = require("./routes/index");
 const { clearImagesQueue } = require("./services/queue");
 
 var app = express();
-app.use(cookieParser());
 app.use(cors());
 
 // view engine setup
