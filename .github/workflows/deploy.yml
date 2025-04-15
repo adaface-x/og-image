@@ -1,0 +1,53 @@
+name: CI/CD Deploy
+
+on:
+    workflow_dispatch:
+        inputs:
+            sha_short:
+                description: "Trigger deployment: Provide version to deploy"
+                required: true
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Set commit SHA
+              id: set_sha
+              run: echo "sha_short=${{ github.event.inputs.sha_short }}" >> $GITHUB_OUTPUT
+
+            - name: Deploy og-image
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.VM_HOST }}
+                  username: ${{ secrets.VM_USERNAME }}
+                  key: ${{ secrets.VM_KEY }}
+                  script: |
+                      sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} ${{ secrets.DOCKER_REGISTRY }}
+                      sudo docker pull --quiet ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.set_sha.outputs.sha_short }}
+                      if [ $? -ne 0 ]; then
+                        echo "Image not found: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.set_sha.outputs.sha_short }}"
+                        exit 1
+                      fi
+                      sudo docker network create og-image-network || true
+                      sudo docker run -d --name og_image_redis \
+                      --network og-image-network \
+                      -p 6390:6379 \
+                      --restart always \
+                      redis:6.2.6-alpine || true
+                      sudo docker stop og_image || true
+                      sudo docker rm og_image || true
+                      sudo docker run -d --name og-image \
+                      -p 4000:4000 \
+                      -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+                      -e OG_IMAGE_REDIS_URL=rediss://og_image_redis:6379/ \
+                      -e OG_IMAGE_SERVER_URL=${{ secrets.OG_IMAGE_SERVER_URL }} \
+                      -e DEBUG=0 \
+                      -e DISCORD_ERRORS_WEBHOOK=${{ secrets.DISCORD_ERRORS_WEBHOOK }} \
+                      -e PORT=4000 \
+                      -e NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} \
+                      -e NEW_RELIC_APP_NAME=${{ secrets.NEW_RELIC_APP_NAME }} \
+                      -e NEW_RELIC_NO_CONFIG_FILE=1 \
+                      --network og-image-network \
+                      ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.set_sha.outputs.sha_short }}
+                      sudo docker image prune -a -f
