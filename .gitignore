@@ -9,3 +9,4 @@ puppeteer.config.cjs
 public/generated
 docker-compose.prod.yml
 nginx
+.vscode
