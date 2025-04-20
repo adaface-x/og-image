@@ -94,6 +94,9 @@ router.get("/og-image/:image/", async function (req, res, next) {
                     message: "Error generating og image",
                     data: {
                         error: String(err),
+                        ...(req.query || {}),
+                        title: title || "",
+                        error_message: err?.message || "",
                     },
                 });
                 res.status(500).send({
