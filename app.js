@@ -24,18 +24,15 @@ const ogImageCorsOptions = {
             return callback(null, true);
         }
 
+        if (!origin) {
+            return callback(null, true);
+        }
+
         // Get allowed origins from environment variable
         const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
             .split(",")
             .map((origin) => origin.trim())
             .filter((origin) => origin.length > 0);
-
-        if (allowedOrigins.length === 0) {
-            console.error(
-                "ENABLE_CORS_RESTRICTION is true but no ALLOWED_ORIGINS configured"
-            );
-            return callback(new Error("CORS configuration error"));
-        }
 
         // Check if origin is in allowed list
         if (allowedOrigins.includes(origin)) {
@@ -65,6 +62,9 @@ const ogImageCorsOptions = {
 // Apply unrestricted CORS to queues
 app.use("/queues", cors());
 
+// Apply restricted CORS to OG image routes
+app.use("/og-image", cors(ogImageCorsOptions));
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -83,9 +83,6 @@ createBullBoard({
 });
 serverAdapter.setBasePath("/queues");
 app.use("/queues", serverAdapter.getRouter());
-
-// Apply restricted CORS to OG image routes
-app.use("/og-image", cors(ogImageCorsOptions));
 
 // Main router
 app.use("/", indexRouter);
