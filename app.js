@@ -12,7 +12,57 @@ var indexRouter = require("./routes/index");
 const { clearImagesQueue } = require("./services/queue");
 
 var app = express();
-app.use(cors());
+
+const ogImageCorsOptions = {
+    origin: function (origin, callback) {
+        // Check if CORS restriction is enabled
+        const corsEnabled = process.env.ENABLE_CORS_RESTRICTION === "true";
+
+        if (!corsEnabled) {
+            // CORS restriction disabled, allow all origins
+            return callback(null, true);
+        }
+
+        if (!origin) {
+            return callback(null, true);
+        }
+
+        // Get allowed origins from environment variable
+        const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
+            .split(",")
+            .map((origin) => origin.trim())
+            .filter((origin) => origin.length > 0);
+
+        // Check if origin is in allowed list
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        // Check for wildcard subdomain support (e.g., *.example.com)
+        const isAllowed = allowedOrigins.some((allowedOrigin) => {
+            if (allowedOrigin.startsWith("*.")) {
+                const domain = allowedOrigin.substring(2); // Remove *.
+                return origin.endsWith("." + domain) || origin === domain;
+            }
+            return false;
+        });
+
+        if (isAllowed) {
+            return callback(null, true);
+        }
+
+        console.log(`CORS: Blocked request from origin: ${origin}`);
+        callback(new Error(`Origin ${origin} not allowed by CORS policy`));
+    },
+    credentials: true, // Allow credentials (cookies, authorization headers)
+    optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+// Apply unrestricted CORS to queues
+app.use("/queues", cors());
+
+// Apply restricted CORS to OG image routes
+app.use("/og-image", cors(ogImageCorsOptions));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
