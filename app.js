@@ -16,7 +16,7 @@ var app = express();
 const ogImageCorsOptions = {
     origin: function (origin, callback) {
         // Check if CORS restriction is enabled
-        const corsEnabled = process.env.ENABLE_CORS_RESTRICTION === "true";
+        const corsEnabled = process.env.ENABLE_CORS_RESTRICTION || false;
 
         if (!corsEnabled) {
             // CORS restriction disabled, allow all origins
