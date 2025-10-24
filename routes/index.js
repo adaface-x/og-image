@@ -3,29 +3,19 @@ var router = express.Router();
 var fs = require("fs");
 var path = require("path");
 var crypto = require("crypto");
-
+var cors = require("cors");
 const { isValidHexaCode } = require("../utils/util");
 const { generateScreenshotUsingPuppeteer } = require("../services/puppeteer");
 const { sendDiscordAlert } = require("../services/discord");
 require("./jobs");
+const { ogImageCorsOptions } = require("../utils/corsOptions");
 
 // Return with generated image
-router.get("/og-image/:image/", async function (req, res, next) {
-    if (!req.params.image) {
-        res.status(400).send({
-            error: "BAD_REQUEST",
-            message: "Missing required fields",
-        });
-        return;
-    }
-
-    const title = req.params.image.split(".png")[0] || "";
-
-    try {
-        const { name, backgroundColor, fontColor, authorName, profilePicture } =
-            req.query || {};
-
-        if (!title || !authorName || !profilePicture || !name) {
+router.get(
+    "/og-image/:image/",
+    cors(ogImageCorsOptions),
+    async function (req, res, next) {
+        if (!req.params.image) {
             res.status(400).send({
                 error: "BAD_REQUEST",
                 message: "Missing required fields",
@@ -33,99 +23,119 @@ router.get("/og-image/:image/", async function (req, res, next) {
             return;
         }
 
-        if (profilePicture && !profilePicture.startsWith("http")) {
-            res.status(400).send({
-                error: "BAD_REQUEST",
-                message: "Profile picture must be a valid URL",
-            });
-            return;
-        }
+        const title = req.params.image.split(".png")[0] || "";
 
-        if (backgroundColor && !isValidHexaCode(backgroundColor)) {
-            res.status(400).send({
-                error: "BAD_REQUEST",
-                message: "Background color must be a valid hex color",
-            });
-            return;
-        }
+        try {
+            const {
+                name,
+                backgroundColor,
+                fontColor,
+                authorName,
+                profilePicture,
+            } = req.query || {};
 
-        if (fontColor && !isValidHexaCode(fontColor)) {
-            res.status(400).send({
-                error: "BAD_REQUEST",
-                message: "Font color must be a valid hex color",
-            });
-            return;
-        }
-
-        var data = {
-            ...(req.query || {}),
-            title: title || "",
-            tags: ((req.query || {}).tags || "").split(",") || [],
-        };
-
-        // create a unique hash for all the data used to generate this image
-        // this will be used to check if the image is already generated
-        const hash = crypto
-            .createHash("md5")
-            .update(JSON.stringify(data))
-            .digest("hex");
-
-        // check if the file is present in the public/generated folder
-
-        const filePath = path.join(
-            __dirname,
-            "../public/generated",
-            hash + "-" + encodeURIComponent(title || "og_image") + ".png"
-        );
-
-        if (fs.existsSync(filePath)) {
-            return res.sendFile(filePath);
-        }
-
-        const image = await generateScreenshotUsingPuppeteer({
-            template: "og-image",
-            data,
-        });
-
-        fs.writeFile(filePath, image, (err) => {
-            if (err) {
-                console.error("Error generating og image", err);
-                sendDiscordAlert({
-                    message: "Error generating og image",
-                    data: {
-                        error: String(err),
-                        ...(req.query || {}),
-                        title: title || "",
-                        error_message: err?.message || "",
-                    },
-                });
-                res.status(500).send({
-                    error: "INTERNAL_SERVER_ERROR",
-                    message: (err || {}).message || "Something went wrong",
+            if (!title || !authorName || !profilePicture || !name) {
+                res.status(400).send({
+                    error: "BAD_REQUEST",
+                    message: "Missing required fields",
                 });
                 return;
-            } else {
-                return res.sendFile(filePath);
             }
-        });
-    } catch (error) {
-        console.error("Error generating og image 2", error);
-        sendDiscordAlert({
-            message: "Error generating og image",
-            data: {
-                error: String(error),
+
+            if (profilePicture && !profilePicture.startsWith("http")) {
+                res.status(400).send({
+                    error: "BAD_REQUEST",
+                    message: "Profile picture must be a valid URL",
+                });
+                return;
+            }
+
+            if (backgroundColor && !isValidHexaCode(backgroundColor)) {
+                res.status(400).send({
+                    error: "BAD_REQUEST",
+                    message: "Background color must be a valid hex color",
+                });
+                return;
+            }
+
+            if (fontColor && !isValidHexaCode(fontColor)) {
+                res.status(400).send({
+                    error: "BAD_REQUEST",
+                    message: "Font color must be a valid hex color",
+                });
+                return;
+            }
+
+            var data = {
                 ...(req.query || {}),
                 title: title || "",
-                error_message: error?.message || "",
-            },
-        });
+                tags: ((req.query || {}).tags || "").split(",") || [],
+            };
 
-        res.status(500).send({
-            error: "INTERNAL_SERVER_ERROR",
-            message: (error || {}).message || "Something went wrong",
-        });
+            // create a unique hash for all the data used to generate this image
+            // this will be used to check if the image is already generated
+            const hash = crypto
+                .createHash("md5")
+                .update(JSON.stringify(data))
+                .digest("hex");
+
+            // check if the file is present in the public/generated folder
+
+            const filePath = path.join(
+                __dirname,
+                "../public/generated",
+                hash + "-" + encodeURIComponent(title || "og_image") + ".png"
+            );
+
+            if (fs.existsSync(filePath)) {
+                return res.sendFile(filePath);
+            }
+
+            const image = await generateScreenshotUsingPuppeteer({
+                template: "og-image",
+                data,
+            });
+
+            fs.writeFile(filePath, image, (err) => {
+                if (err) {
+                    console.error("Error generating og image", err);
+                    sendDiscordAlert({
+                        message: "Error generating og image",
+                        data: {
+                            error: String(err),
+                            ...(req.query || {}),
+                            title: title || "",
+                            error_message: err?.message || "",
+                        },
+                    });
+                    res.status(500).send({
+                        error: "INTERNAL_SERVER_ERROR",
+                        message: (err || {}).message || "Something went wrong",
+                    });
+                    return;
+                } else {
+                    return res.sendFile(filePath);
+                }
+            });
+        } catch (error) {
+            console.error("Error generating og image 2", error);
+            sendDiscordAlert({
+                message: "Error generating og image",
+                data: {
+                    error: String(error),
+                    ...(req.query || {}),
+                    title: title || "",
+                    error_message: error?.message || "",
+                },
+            });
+
+            res.status(500).send({
+                error: "INTERNAL_SERVER_ERROR",
+                message: (error || {}).message || "Something went wrong",
+            });
+        }
     }
-});
+);
 
 // Show the base image generation page with default values
 router.get(["/og-image"], function (req, res, next) {
