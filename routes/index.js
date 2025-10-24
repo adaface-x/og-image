@@ -11,17 +11,17 @@ require("./jobs");
 
 // Return with generated image
 router.get("/og-image/:image/", async function (req, res, next) {
+    if (!req.params.image) {
+        res.status(400).send({
+            error: "BAD_REQUEST",
+            message: "Missing required fields",
+        });
+        return;
+    }
+
+    const title = req.params.image.split(".png")[0] || "";
+
     try {
-        if (!req.params.image) {
-            res.status(400).send({
-                error: "BAD_REQUEST",
-                message: "Missing required fields",
-            });
-            return;
-        }
-
-        const title = req.params.image.split(".png")[0] || "";
-
         const { name, backgroundColor, fontColor, authorName, profilePicture } =
             req.query || {};
 
